@@ -1,19 +1,19 @@
 ---
 - name: Test1
   hosts: all
-  gather_facts: false
   sources:
-    ansible.eda.webhook:
-      host: 0.0.0.0
-      port: 6666
+    - name: Test
+      ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 6666
   rules:
     - name: regla fs
-      conditional: event.payload.message == "test01"
+      condition: event.payload.message == "test01"
       action:
-        - run_job_template:
-            name: "Demo test"
-            organization: "Desarrollo"
-            job_args:
-              extra_vars:
-                nombre: "John"
+        run_job_template:
+          name: "Demo test"
+          organization: "Desarrollo"
+          job_args:
+            extra_vars:
+              nombre: "John"
 ...
