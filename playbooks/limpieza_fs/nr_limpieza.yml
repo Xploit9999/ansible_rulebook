@@ -18,9 +18,9 @@
        {{ (((total - disponible) / total) * 100) | round ~ '%' }}
     vars:
       total: >-
-        {{ ansible_mounts | selectattr('mount', 'equalto', '/terraform') | map(attribute='size_total') | first }}
+        {{ ansible_mounts | selectattr('mount', 'equalto', fs) | map(attribute='size_total') | first }}
       disponible: >-
-        {{ ansible_mounts | selectattr('mount', 'equalto', '/terraform') | map(attribute='size_available') | first }}
+        {{ ansible_mounts | selectattr('mount', 'equalto', fs) | map(attribute='size_available') | first }}
 
   tasks:
 
@@ -46,9 +46,9 @@
        {{ (((total - disponible) / total) * 100) | round ~ '%' }}
     vars:
       total: >-
-        {{ ansible_mounts | selectattr('mount', 'equalto', '/terraform') | map(attribute='size_total') | first }}
+        {{ ansible_mounts | selectattr('mount', 'equalto', fs) | map(attribute='size_total') | first }}
       disponible: >-
-        {{ ansible_mounts | selectattr('mount', 'equalto', '/terraform') | map(attribute='size_available') | first }}
+        {{ ansible_mounts | selectattr('mount', 'equalto', fs) | map(attribute='size_available') | first }}
 
 
   - name: TEST | Suministra resultado al siguiente flujo
