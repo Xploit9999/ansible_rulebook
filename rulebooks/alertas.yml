@@ -11,8 +11,8 @@
     - name: Newrelic | Alerta FS lleno /terraform
       condition: event.payload.sources == "newrelic"
       action:
-        run_job_template:
-          name: "Limpiar fs Terraform"
+        run_workflow_template:
+          name: "WF_Limpieza_fs"
           organization: "Desarrollo"
           job_args:
             extra_vars:
