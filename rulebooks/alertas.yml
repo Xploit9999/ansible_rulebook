@@ -16,6 +16,6 @@
           organization: "Desarrollo"
           job_args:
             extra_vars:
-              servidor: "{{ hostname }}"
-              fs: "{{ filesystem }}"
+              servidor: event.payload.hostname
+              fs: event.payload.filesystem
 ...
