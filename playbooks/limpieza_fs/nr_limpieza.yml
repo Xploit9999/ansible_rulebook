@@ -1,0 +1,61 @@
+---
+- name: Remediar limpieza fs Terraform
+  hosts: "{{ servidor }}"
+  gather_facts: false
+  become: true
+  pre_tasks:
+
+  - name: TEST | Recolección metrica antes
+    setup:
+      gather_subset:
+        - '!all'
+        - mounts 
+
+  - set_fact:
+      uso_antes: >-
+       {%- set total = total | float -%}
+       {%- set disponible = disponible | float -%}
+       {{ (((total - disponible) / total) * 100) | round ~ '%' }}
+    vars:
+      total: >-
+        {{ ansible_mounts | selectattr('mount', 'equalto', '/terraform') | map(attribute='size_total') | first }}
+      disponible: >-
+        {{ ansible_mounts | selectattr('mount', 'equalto', '/terraform') | map(attribute='size_available') | first }}
+
+  tasks:
+
+  - name: TEST | Eliminar archivo
+    file:
+      path: "{{ fs  ~ '/testfile' }}"
+      state: absent
+    register: limpieza
+    check_mode: true
+
+  post_tasks:
+
+  - name: TEST | Recolección metrica antes
+    setup:
+      gather_subset:
+        - '!all'
+        - mounts 
+
+  - set_fact:
+      uso_despues: >-
+       {%- set total = total | float -%}
+       {%- set disponible = disponible | float -%}
+       {{ (((total - disponible) / total) * 100) | round ~ '%' }}
+    vars:
+      total: >-
+        {{ ansible_mounts | selectattr('mount', 'equalto', '/terraform') | map(attribute='size_total') | first }}
+      disponible: >-
+        {{ ansible_mounts | selectattr('mount', 'equalto', '/terraform') | map(attribute='size_available') | first }}
+
+
+  - name: TEST | Suministra resultado al siguiente flujo
+    set_stats:
+      data:
+        uso_antes: "{{ uso_antes }}"
+        uso_despues: "{{ uso_despues }}"
+        asunto: "{{ '🔔 Estado de autoremediación FS ' ~ fs ~ ' - ' ~ now(fmt='%d-%m-%Y %H:%M') }}" 
+        fs: "{{ fs }}"
+...

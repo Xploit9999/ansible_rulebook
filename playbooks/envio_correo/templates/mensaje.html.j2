@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Reporte de Uso de Filesystem</title>
+  <style type="text/css">
+    {{ lookup('file', 'files/style.css') }}
+  </style>
+</head>
+
+<body>
+  <div class="mail-container">
+
+    <div class="mail-header">
+      <h1>Reporte de Uso de Filesystem {{ fs }}</h1>
+      <p class="subtitle">Comparativo antes y después de la intervención</p>
+    </div>
+
+    <div class="mail-content">
+      <p class="intro">
+        A continuación se presenta el detalle del uso del filesystem,
+        comparando el estado previo y posterior al proceso ejecutado.
+      </p>
+
+      <table class="usage-table">
+        <thead>
+          <tr>
+            <th>Estado</th>
+            <th>Uso del Filesystem</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="label">Antes</td>
+            <td class="value before">{{ uso_antes }}</td>
+          </tr>
+          <tr>
+            <td class="label">Después</td>
+            <td class="value after">{{ uso_despues }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mail-footer">
+      <p>
+        Este correo ha sido generado de manera automática.<br>
+        Por favor, no responder a este mensaje.
+      </p>
+    </div>
+
+  </div>
+</body>
+</html>

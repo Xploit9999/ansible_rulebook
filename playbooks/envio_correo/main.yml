@@ -1,0 +1,19 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  vars_files:
+    - vars/main.yml
+  tasks:
+
+  - name: TEST | Enviar correo 
+    mail:
+      host: "{{ servidor_correo }}" 
+      port: "{{ puerto }}"
+      username: "{{ correo_gmail }}"
+      password: "{{ password_gmail }}"
+      to: "{{ correo_a }}"
+      subject: "{{ asunto }}"
+      body: "{{ lookup('template', 'templates/mensaje.html.j2') }}"
+      subtype: html
+...

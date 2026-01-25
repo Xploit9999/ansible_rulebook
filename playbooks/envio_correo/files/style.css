@@ -1,0 +1,92 @@
+/* Reset básico */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f4f6f8;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #333333;
+}
+
+/* Contenedor principal */
+.mail-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+}
+
+/* Header */
+.mail-header {
+  background-color: #1f3c88;
+  color: #ffffff;
+  padding: 20px;
+  text-align: center;
+}
+
+.mail-header h1 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.mail-header .subtitle {
+  margin-top: 5px;
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+/* Contenido */
+.mail-content {
+  padding: 20px;
+}
+
+.mail-content .intro {
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+/* Tabla */
+.usage-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.usage-table th {
+  background-color: #f0f2f5;
+  text-align: left;
+  padding: 10px;
+  border-bottom: 2px solid #dcdcdc;
+}
+
+.usage-table td {
+  padding: 10px;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.usage-table .label {
+  font-weight: bold;
+  width: 40%;
+}
+
+/* Estados */
+.value.before {
+  color: #b00020;
+  font-weight: bold;
+}
+
+.value.after {
+  color: #0a7d2c;
+  font-weight: bold;
+}
+
+/* Footer */
+.mail-footer {
+  background-color: #f9fafb;
+  padding: 15px;
+  font-size: 11px;
+  color: #666666;
+  text-align: center;
+  border-top: 1px solid #e0e0e0;
+}
+
