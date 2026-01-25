@@ -1,0 +1,21 @@
+---
+- name: Rulebook de monitoreo de alertas
+  hosts: all
+  sources:
+    - name: webhook
+      ansible.eda.webhook:
+        hosts: 0.0.0.0
+        port: 6666
+
+  rules:
+    - name: Newrelic | Alerta FS lleno /terraform
+      condition: event.payload.sources == "newrelic"
+      action:
+        run_job_template:
+          name: "Limpiar fs Terraform"
+          organization: "Desarrollo"
+          job_args:
+            extra_vars:
+              servidor: "{{ hostname }}"
+              fs: "{{ filesystem }}"
+...
