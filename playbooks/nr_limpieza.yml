@@ -1,0 +1,10 @@
+---
+- name: Remediar limpieza fs Terraform
+  hosts: "{{ servidor }}"
+  gather_facts: false
+  tasks:
+
+  - debug:
+      var: fs
+
+...
