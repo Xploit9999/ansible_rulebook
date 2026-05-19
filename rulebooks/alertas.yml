@@ -18,4 +18,31 @@
             extra_vars:
               servidor: "{{ event.payload.hostname }}"
               fs: "{{ event.payload.filesystem }}"
+
+    - name: "IIS Pool Down — Remediación automática"
+      condition: >
+        event.payload.problemTitle is search("Application Pool", ignorecase=true)
+        and event.payload.state == "OPEN"
+        and event.payload.severityLevel in ["AVAILABILITY", "ERROR"]
+
+      action:
+        run_job_template:
+          name:        "Remediation - IIS Application Pool Restart"
+          organization: "Default"
+          job_args:
+            extra_vars:
+              target_host:        "{{ event.payload.impactedEntities[0].name }}"
+              app_pool_name:      "{{ event.payload.app_pool_name }}"
+              dynatrace_problem_id: "{{ event.payload.problemId }}"
+
+    - name: "IIS Pool Recovered — Notificación"
+      condition: >
+        event.payload.problemTitle is search("Application Pool", ignorecase=true)
+        and event.payload.state == "RESOLVED"
+
+      action:
+        post_event:
+          event:
+            msg: "Pool recuperado — no se requiere acción"
+            problem_id: "{{ event.payload.problemId }}"
 ...
