@@ -4,7 +4,7 @@
   sources:
     - name: webhook
       ansible.eda.webhook:
-        hosts: 0.0.0.0
+        host: 0.0.0.0
         port: 6666
 
   rules:
@@ -33,6 +33,24 @@
               target_host: "{{ event.payload.eventData.server }}"
               app_pool_name: "{{ event.payload.eventData.pool }}"
               dynatrace_problem_id: "{{ event.payload.eventData.problem_id }}"
-              ticket_id: "{{ event.payload.eventData.zammad_ticket_id }}" 
+              ticket_id: "{{ event.payload.eventData.zammad_ticket_id }}"
               ticket_number: "{{ event.payload.eventData.zammad_ticket_number }}"
+
+    - name: "Instana | Limpieza filesystem Linux"
+      condition: >
+        event.payload.source == "instana-orchestrator"
+        and event.payload.event.filesystem is defined
+        and event.payload.event.filesystem != "n/a"
+      action:
+        run_job_template:
+          name: "ID00_Limpieza_Linux"
+          organization: "Desarrollo"
+          job_args:
+            extra_vars:
+              servidor: "{{ event.payload.event.host }}"
+              fs: "{{ event.payload.event.filesystem }}"
+              uso_pct: "{{ event.payload.event.value }}"
+              severity: "{{ event.payload.event.severity }}"
+              instana_event_id: "{{ event.payload.event.event_id }}"
+              ticket_number: "{{ event.payload.ticket.number }}"
 ...
