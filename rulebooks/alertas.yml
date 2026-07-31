@@ -19,7 +19,7 @@
               servidor: "{{ event.payload.hostname }}"
               fs: "{{ event.payload.filesystem }}"
 
-    - name: "IIS Pool Down — Remediación automática"
+    - name: "IIS Pool Down — Remediación automática (Dynatrace)"
       condition: >
         event.payload.eventData.source == 'Dynatrace'
         and event.payload.eventData.description is search("IIS App Pool", ignorecase=true)
@@ -37,9 +37,11 @@
               ticket_number: "{{ event.payload.eventData.zammad_ticket_number }}"
 
     - name: "Instana | Limpieza filesystem Linux"
+      # El orquestador (Azure Function) ya filtra eventos con state=CLOSED
+      # antes de reenviarlos aquí, así que no hace falta revalidar el estado.
       condition: >
         event.payload.source == "instana-orchestrator"
-        and event.payload.event.filesystem is defined
+        and event.payload.event.category == "filesystem"
         and event.payload.event.filesystem != "n/a"
       action:
         run_job_template:
@@ -52,5 +54,26 @@
               uso_pct: "{{ event.payload.event.value }}"
               severity: "{{ event.payload.event.severity }}"
               instana_event_id: "{{ event.payload.event.event_id }}"
+              ticket_number: "{{ event.payload.ticket.number }}"
+
+    - name: "Instana | IIS carga elevada — Remediación automática"
+      # OJO: esta alerta es de VOLUMEN de requests (umbral superado), no de
+      # pool caído. Restart automático bajo alta carga puede ser
+      # contraproducente (corta conexiones activas justo cuando el sitio
+      # está más ocupado). Confirmar que este es el comportamiento deseado
+      # antes de dejarlo corriendo sin supervisión.
+      condition: >
+        event.payload.source == "instana-orchestrator"
+        and event.payload.event.category == "iis_app_pool"
+        and event.payload.event.site_name != "n/a"
+      action:
+        run_job_template:
+          name: "ID00_Reinicio_Pool_IIS"
+          organization: "Desarrollo"
+          job_args:
+            extra_vars:
+              target_host: "{{ event.payload.event.host }}"
+              app_pool_name: "{{ event.payload.event.site_name }}"
+              dynatrace_problem_id: "{{ event.payload.event.event_id }}"
               ticket_number: "{{ event.payload.ticket.number }}"
 ...
