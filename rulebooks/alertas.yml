@@ -72,7 +72,6 @@
           organization: "Desarrollo"
           job_args:
             extra_vars:
-              target_host: "{{ event.payload.event.host }}"
               app_pool_name: "{{ event.payload.event.site_name }}"
               dynatrace_problem_id: "{{ event.payload.event.event_id }}"
               ticket_number: "{{ event.payload.ticket.number }}"
