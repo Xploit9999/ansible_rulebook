@@ -80,6 +80,9 @@
     - name: Identity | Self Service
       condition: >
         event.payload.source == "identity-selfservice"
+        or (event.payload.eventData.source == 'Dynatrace' 
+            and event.payload.eventData.description is search("Cuenta de servicio bloqueada", ignorecase=true) 
+            and event.payload.eventData.status == "ACTIVE")
       action:
         run_workflow_template:
           name: "ID00_WF_GestionUsuarios"
