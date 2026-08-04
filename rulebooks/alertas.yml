@@ -22,7 +22,7 @@
     - name: "IIS Pool Down — Remediación automática (Dynatrace)"
       condition: >
         event.payload.eventData.source == 'Dynatrace'
-        and event.payload.eventData.description is search("IIS App Pool", ignorecase=true)
+        and event.payload.eventData.description is search("IIS Pool", ignorecase=true)
         and event.payload.eventData.status == "ACTIVE"
       action:
         run_job_template:
