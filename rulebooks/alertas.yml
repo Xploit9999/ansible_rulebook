@@ -25,8 +25,8 @@
         and event.payload.eventData.description is search("IIS Pool", ignorecase=true)
         and event.payload.eventData.status == "ACTIVE"
       action:
-        run_job_template:
-          name: "ID00_Reinicio_Pool_IIS"
+        run_workflow_template:
+          name: "ID00_WF_Reinicio_Pool_IIS"
           organization: "Desarrollo"
           job_args:
             extra_vars:
