@@ -81,8 +81,8 @@
       condition: >
         event.payload.source == "identity-selfservice"
       action:
-        run_job_template:
-          name: "ID00_Gestion_cuentas_AD"
+        run_workflow_template:
+          name: "ID00_WF_GestionUsuarios"
           organization: "Desarrollo"
           job_args:
             extra_vars:
