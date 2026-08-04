@@ -82,16 +82,16 @@
         event.payload.source == "identity-selfservice"
         or (event.payload.eventData.source == 'Dynatrace' 
             and event.payload.eventData.description is search("Cuenta de servicio bloqueada", ignorecase=true) 
-            and event.payload.eventData.status == "ACTIVE")
+            and event.payload.eventData.status == "ACTIVE")        
       action:
         run_workflow_template:
           name: "ID00_WF_GestionUsuarios"
           organization: "Desarrollo"
           job_args:
             extra_vars:
-              username: "{{ event.payload.event.username }}"
-              action: "{{ event.payload.event.action }}"
-              requested_by: "{{ event.payload.event.requested_by }}"
-              ticket_id: "{{ event.payload.ticket.id }}"
-              ticket_number: "{{ event.payload.ticket.number }}"
+              username: "{{ event.payload.event.username | default(event.payload.eventData.username) }}"
+              action: "{{ event.payload.event.action | default(event.payload.eventData.action) }}"
+              requested_by: "{{ event.payload.event.requested_by | default(event.payload.eventData.requested_by) }}"
+              ticket_id: "{{ event.payload.ticket.id | default(event.payload.eventData.zammad_ticket_id) }}"
+              ticket_number: "{{ event.payload.ticket.number | default(event.payload.eventData.zammad_ticket_number) }}"              
 ...
