@@ -76,4 +76,19 @@
               dynatrace_problem_id: "{{ event.payload.event.event_id }}"
               ticket_id: "{{ event.payload.ticket.id }}"
               ticket_number: "{{ event.payload.ticket.number }}"
+
+    - name: Identity | Self Service
+      condition: >
+        event.payload.source == "identity-selfservice"
+      action:
+        run_job_template:
+          name: "ID00_Gestion_cuentas_AD"
+          organization: "Desarrollo"
+          job_args:
+            extra_vars:
+              username: "{{ event.payload.event.username }}"
+              action: "{{ event.payload.event.action }}"
+              requested_by: "{{ event.payload.event.requested_by }}"
+              ticket_id: "{{ event.payload.ticket.id }}"
+              ticket_number: "{{ event.payload.ticket.number }}"
 ...
