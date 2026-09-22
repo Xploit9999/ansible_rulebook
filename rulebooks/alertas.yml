@@ -41,8 +41,8 @@
       # antes de reenviarlos aquí, así que no hace falta revalidar el estado.
       condition: >
         event.payload.source == "instana-orchestrator"
-#        and event.payload.event.category == "filesystem"
-#        and event.payload.event.filesystem != "n/a"
+        and event.payload.event.category == "filesystem"
+        and event.payload.event.filesystem != "n/a"
       action:
         run_workflow_template:
           name: "ID00_WF_Limpieza_FS"
