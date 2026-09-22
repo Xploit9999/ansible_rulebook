@@ -63,7 +63,7 @@
           organization: "Desarrollo"
           job_args:
             extra_vars:
-              app_pool_name: "{{ event.payload.event.problem | regex_search(\"IIS App Pool '([^']+)'\", '\\1') | first }}"
+              app_pool_name: "{{ event.payload.event.problem.split(\"'\")[1] }}" 
               dynatrace_problem_id: "{{ event.payload.event.event_id }}"
               ticket_id: "{{ event.payload.ticket.id }}"
               ticket_number: "{{ event.payload.ticket.number }}"
