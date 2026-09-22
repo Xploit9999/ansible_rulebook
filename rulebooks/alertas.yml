@@ -39,14 +39,14 @@
     - name: "Instana | Limpieza filesystem Linux"
       condition: >
         event.payload.source == "instana-orchestrator"
-        and event.payload.event.metric is match("^fs\\..+\\.used$")
+        and event.payload.event.text is search("Filesystem /LogsApp Umbral alto")
       action:
         run_workflow_template:
           name: "ID00_WF_Limpieza_FS"
           organization: "Desarrollo"
           job_args:
             extra_vars:
-              fs: "{{ event.payload.event.metric | regex_replace('^fs\\.(.+)\\.used$', '\\1') }}"
+              fs: "/LogsApp"
               severity: "{{ event.payload.event.severity }}"
               instana_event_id: "{{ event.payload.event.event_id }}"
               ticket_number: "{{ event.payload.ticket.number }}"              
