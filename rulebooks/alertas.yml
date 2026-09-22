@@ -41,17 +41,17 @@
       # antes de reenviarlos aquí, así que no hace falta revalidar el estado.
       condition: >
         event.payload.source == "instana-orchestrator"
-        and event.payload.event.category == "filesystem"
-        and event.payload.event.filesystem != "n/a"
+        and event.payload.event.metric is match("^fs_mount\..+\\.used$")
+        and event.payload.event.raw.entityType == "Host"        
       action:
         run_workflow_template:
           name: "ID00_WF_Limpieza_FS"
           organization: "Desarrollo"
           job_args:
             extra_vars:
-              servidor: "{{ event.payload.event.host }}"
-              fs: "{{ event.payload.event.filesystem }}"
-              uso_pct: "{{ event.payload.event.value }}"
+#              servidor: "{{ event.payload.event.host }}"
+              fs: "{{ event.payload.event.metric | regex_replace('^fs_mount\\.(.+)\\.used$', '\\1') }}"
+              uso_pct: "{{ (event.payload.event.raw.metricValue | float * 100) | round(2) }}"
               severity: "{{ event.payload.event.severity }}"
               instana_event_id: "{{ event.payload.event.event_id }}"
               ticket_number: "{{ event.payload.ticket.number }}"
