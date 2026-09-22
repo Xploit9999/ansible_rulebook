@@ -39,7 +39,7 @@
     - name: "Instana | Limpieza filesystem Linux"
       condition: >
         event.payload.source == "instana-orchestrator"
-        and event.payload.event.text is search("Filesystem /LogsApp Umbral alto")
+        and event.payload.event.raw.text is search("Filesystem /LogsApp Umbral alto")
       action:
         run_workflow_template:
           name: "ID00_WF_Limpieza_FS"
