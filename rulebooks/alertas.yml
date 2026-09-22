@@ -108,4 +108,19 @@
               requested_by: "{{ event.payload.eventData.requested_by }}"
               ticket_id: "{{ event.payload.eventData.zammad_ticket_id }}"
               ticket_number: "{{ event.payload.eventData.zammad_ticket_number }}"
+
+    - name: Autorremediación para indisponibilidad del portal
+      condition: >
+        event.payload.source == 'instana-orchestrator'
+        and event.payload.event.problem is search("Portal Web - Indisponibilidad HTTP", ignorecase=true)
+        and event.payload.event.state == "OPEN"
+      action:
+        run_workflow_template:
+          name: "ID00_WF_GestionUsuarios"
+          organization: "Desarrollo"
+          job_args:
+            extra_vars:
+              requested_by: "{{ event.payload.source }}"
+              ticket_id: "{{ event.payload.ticket.id }}"
+              ticket_number: "{{ event.payload.ticket.number }}"
 ...
