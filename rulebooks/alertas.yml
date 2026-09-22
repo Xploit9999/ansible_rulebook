@@ -57,18 +57,13 @@
               ticket_number: "{{ event.payload.ticket.number }}"
 
     - name: "Instana | IIS carga elevada — Remediación automática"
-      # OJO: esta alerta es de VOLUMEN de requests (umbral superado), no de
-      # pool caído. Restart automático bajo alta carga puede ser
-      # contraproducente (corta conexiones activas justo cuando el sitio
-      # está más ocupado). Confirmar que este es el comportamiento deseado
-      # antes de dejarlo corriendo sin supervisión.
       condition: >
         event.payload.source == "instana-orchestrator"
         and event.payload.event.category == "iis_app_pool"
         and event.payload.event.site_name != "n/a"
       action:
-        run_job_template:
-          name: "ID00_Reinicio_Pool_IIS"
+        run_workflow_template:
+          name: "ID00_WF_Reinicio_Pool_IIS"
           organization: "Desarrollo"
           job_args:
             extra_vars:
