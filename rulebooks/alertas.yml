@@ -54,15 +54,16 @@
     - name: "Instana | IIS carga elevada — Remediación automática"
       condition: >
         event.payload.source == "instana-orchestrator"
-        and event.payload.event.category == "iis_app_pool"
-        and event.payload.event.site_name != "n/a"
+        and event.payload.event.state == "OPEN"
+        and event.payload.event.problem is search("IIS App Pool", ignorecase=true)
+        and event.payload.event.problem is search("no esta en estado Running", ignorecase=true)        
       action:
         run_workflow_template:
           name: "ID00_WF_Reinicio_Pool_IIS"
           organization: "Desarrollo"
           job_args:
             extra_vars:
-              app_pool_name: "{{ event.payload.event.site_name }}"
+              app_pool_name: "{{ event.payload.event.problem | regex_search(\"IIS App Pool '([^']+)'\", '\\1') | first }}"
               dynatrace_problem_id: "{{ event.payload.event.event_id }}"
               ticket_id: "{{ event.payload.ticket.id }}"
               ticket_number: "{{ event.payload.ticket.number }}"
