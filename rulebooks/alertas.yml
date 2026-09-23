@@ -43,7 +43,7 @@
       throttle:
         once_within: 5 minutes
         group_by_attributes:
-          - event.payload.event_id
+          - event.payload.event.event_id
       action:
         run_workflow_template:
           name: "ID00_WF_Limpieza_FS"
