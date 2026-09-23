@@ -68,6 +68,7 @@
           job_args:
             extra_vars:
               app_pool_name: "{{ event.payload.event.problem.split(\"'\")[1] }}" 
+              instana_event_id: "{{ event.payload.event.event_id }}"
               dynatrace_problem_id: "{{ event.payload.event.event_id }}"
               ticket_id: "{{ event.payload.ticket.id }}"
               ticket_number: "{{ event.payload.ticket.number }}"
